@@ -20,7 +20,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Buckwise - Your personal money manager",
   description: "A dedicated platform to manage money",
-  viewport: "width=device-width, initial-scale=1, viewport-fit=cover"
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  }
 };
 
 export default function RootLayout({

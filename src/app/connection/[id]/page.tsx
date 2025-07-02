@@ -13,18 +13,33 @@ const TEXTAREA_PLACEHOLDER = 'Write your message! eg: "I paid rupees 200 for the
 
 const ConnectionPage = () => {
 
-    // page height
-    const [height, setHeight] = useState('calc(100vh-56px)');
+    // handle UI
+    const inputRef = useRef<HTMLTextAreaElement>(null);
+
     useEffect(() => {
-        if (window.innerWidth > 786) return;
-        const setVh = () => {
-            const vh = window.innerHeight * 0.01;
-            setHeight(`${vh}vh`);
+        const handleFocus = () => {
+            window.scrollTo(0, 0);
+            document.body.style.overflow = 'hidden';
         };
-        setVh();
-        window.addEventListener('resize', setVh);
-        return () => window.removeEventListener('resize', setVh);
+
+        const handleBlur = () => {
+            document.body.style.overflow = '';
+        };
+
+        const input = inputRef.current;
+        if (input) {
+            input.addEventListener('focus', handleFocus);
+            input.addEventListener('blur', handleBlur);
+        }
+
+        return () => {
+            if (input) {
+                input.removeEventListener('focus', handleFocus);
+                input.removeEventListener('blur', handleBlur);
+            }
+        };
     }, []);
+
 
     // handle input change
     const [input, setInput] = useState('');
@@ -169,7 +184,7 @@ const ConnectionPage = () => {
     };
 
     return (
-        <div className={clsx('grid grid-rows-[auto_1fr_auto] chat-screen w-full max-md:absolute! max-md:top-0 max-md:left-0 max-md:z-100', `h-[${height}]`)}>
+        <div className={clsx('grid grid-rows-[auto_1fr_auto] chat-screen w-full max-md:absolute! max-md:top-0 max-md:left-0 max-md:z-100', `h-[calc(100vh-56px)] max-md:h-[100dvh]`)}>
             <section className='flex items-center gap-3 p-3 bg-[var(--subground)] md:ml-0.5 md:mt-0.5 mb-1'>
                 <button className='flex items-center gap-1 btn' onClick={() => router.push('/connection')}>
                     <div><i className="ri-arrow-left-line"></i></div>
@@ -222,7 +237,7 @@ const ConnectionPage = () => {
             </section>
 
             <section className='px-2 py-1 h-fit grid grid-cols-[1fr_auto] gap-3 items-baseline sticky bottom-0'>
-                <textarea name="chat-box" id="chat-box" placeholder={TEXTAREA_PLACEHOLDER} className='h-auto resize-none w-full overflow-y-auto p-3 rounded-2xl bg-[var(--subground)] outline-0 border-2 border-transparent focus:border-[var(--primary)] transition-[border] duration-200 scroll-thin' onChange={handleInputChange} value={input} disabled={uploading}></textarea>
+                <textarea name="chat-box" id="chat-box" placeholder={TEXTAREA_PLACEHOLDER} className='h-auto resize-none w-full overflow-y-auto p-3 rounded-2xl bg-[var(--subground)] outline-0 border-2 border-transparent focus:border-[var(--primary)] transition-[border] duration-200 scroll-thin' onChange={handleInputChange} value={input} disabled={uploading} ref={inputRef}></textarea>
                 <button className='bg-[var(--primary)] w-12 h-12 rounded-full text-[1.3em] font-bold self-end btn active:scale-[0.98] flex items-center justify-center' onClick={handleCreateDue} disabled={uploading || !input}>
                     {uploading ? <span><Spinner /></span>
                         : <i className="ri-arrow-up-line"></i>}
