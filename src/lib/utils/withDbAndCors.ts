@@ -2,10 +2,10 @@ import { connectMongo } from '@/lib/db/connect-mongo';
 import { corsHeaders } from '@/lib/utils/corsHeaders';
 import { NextRequest, NextResponse } from 'next/server';
 
-type RouteHandler = (req: NextRequest, param?: { params: Record<string, string> }) => Promise<NextResponse>;
+type RouteHandler = (req: NextRequest) => Promise<NextResponse>;
 
 export const withDbAndCors = (handler: RouteHandler): RouteHandler => {
-    return async (req: NextRequest, param?: { params: Record<string, string> }) => {
+    return async (req: NextRequest) => {
         if (req.method === 'OPTIONS') {
             return new NextResponse(null, { status: 204, headers: corsHeaders });
         }
