@@ -16,29 +16,29 @@ const ConnectionPage = () => {
     // handle UI
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
-    // useEffect(() => {
-    //     const handleFocus = () => {
-    //         window.scrollTo(0, 0);
-    //         document.body.style.overflow = 'hidden';
-    //     };
+    useEffect(() => {
+        const handleFocus = () => {
+            window.scrollTo(0, 0);
+            document.body.style.overflow = 'hidden';
+        };
 
-    //     const handleBlur = () => {
-    //         document.body.style.overflow = '';
-    //     };
+        const handleBlur = () => {
+            document.body.style.overflow = '';
+        };
 
-    //     const input = inputRef.current;
-    //     if (input) {
-    //         input.addEventListener('focus', handleFocus);
-    //         input.addEventListener('blur', handleBlur);
-    //     }
+        const input = inputRef.current;
+        if (input) {
+            input.addEventListener('focus', handleFocus);
+            input.addEventListener('blur', handleBlur);
+        }
 
-    //     return () => {
-    //         if (input) {
-    //             input.removeEventListener('focus', handleFocus);
-    //             input.removeEventListener('blur', handleBlur);
-    //         }
-    //     };
-    // }, []);
+        return () => {
+            if (input) {
+                input.removeEventListener('focus', handleFocus);
+                input.removeEventListener('blur', handleBlur);
+            }
+        };
+    }, []);
 
 
     // handle input change
@@ -184,7 +184,7 @@ const ConnectionPage = () => {
     };
 
     return (
-        <div className={clsx('grid grid-rows-[auto_1fr_auto] chat-screen w-full max-md:absolute! max-md:top-0 max-md:left-0 max-md:z-100', `h-[calc(100vh-56px)] max-md:h-[100vh]`)}>
+        <div className={clsx('grid grid-rows-[auto_1fr_auto] chat-screen w-full max-md:absolute! max-md:top-0 max-md:left-0 max-md:z-100', `h-[calc(100vh-56px)] max-md:h-[100dvh]`)}>
             <section className='flex items-center gap-3 p-3 bg-[var(--subground)] md:ml-0.5 md:mt-0.5 mb-1'>
                 <button className='flex items-center gap-1 btn' onClick={() => router.push('/connection')}>
                     <div><i className="ri-arrow-left-line"></i></div>
@@ -240,9 +240,7 @@ const ConnectionPage = () => {
                 className='px-2 py-1 h-fit grid grid-cols-[1fr_auto] gap-3 items-baseline sticky bottom-0'
                 style={{
                     // Add extra bottom padding if keyboard is open (mobile)
-                    paddingBottom: typeof window !== 'undefined' && window.innerHeight < 500 ? 'env(safe-area-inset-bottom, 80px)' : undefined,
-                    background: 'var(--subground)',
-                    zIndex: 20,
+                    paddingBottom: typeof window !== 'undefined' && window.innerHeight < 769 ? 'env(safe-area-inset-bottom, 80px)' : undefined,
                 }}
             >
                 <textarea
