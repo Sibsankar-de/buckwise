@@ -243,7 +243,7 @@ export const validateAndResetPassword = asyncHandler(async (req: NextRequest) =>
 });
 
 // queries
-export const getUserById = asyncHandler(async (req: NextRequest, context: MiddlewareContext | undefined, param: { params: Record<string, string> } | undefined) => {
+export const getUserById = asyncHandler(async (req: NextRequest, context: MiddlewareContext | undefined) => {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get('id')
 
