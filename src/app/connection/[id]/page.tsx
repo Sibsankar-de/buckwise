@@ -236,8 +236,31 @@ const ConnectionPage = () => {
                 </div>
             </section>
 
-            <section className='px-2 py-1 h-fit grid grid-cols-[1fr_auto] gap-3 items-baseline sticky bottom-0'>
-                <textarea name="chat-box" id="chat-box" placeholder={TEXTAREA_PLACEHOLDER} className='h-auto resize-none w-full overflow-y-auto p-3 rounded-2xl bg-[var(--subground)] outline-0 border-2 border-transparent focus:border-[var(--primary)] transition-[border] duration-200 scroll-thin' onChange={handleInputChange} value={input} disabled={uploading} ref={inputRef}></textarea>
+            <section
+                className='px-2 py-1 h-fit grid grid-cols-[1fr_auto] gap-3 items-baseline sticky bottom-0'
+                style={{
+                    // Add extra bottom padding if keyboard is open (mobile)
+                    paddingBottom: typeof window !== 'undefined' && window.innerHeight < 500 ? 'env(safe-area-inset-bottom, 80px)' : undefined,
+                    background: 'var(--subground)',
+                    zIndex: 20,
+                }}
+            >
+                <textarea
+                    name="chat-box"
+                    id="chat-box"
+                    placeholder={TEXTAREA_PLACEHOLDER}
+                    className='h-auto resize-none w-full overflow-y-auto p-3 rounded-2xl bg-[var(--subground)] outline-0 border-2 border-transparent focus:border-[var(--primary)] transition-[border] duration-200 scroll-thin'
+                    onChange={handleInputChange}
+                    value={input}
+                    disabled={uploading}
+                    ref={inputRef}
+                    onFocus={() => {
+                        // Scroll input into view on mobile when keyboard opens
+                        setTimeout(() => {
+                            inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 300);
+                    }}
+                ></textarea>
                 <button className='bg-[var(--primary)] w-12 h-12 rounded-full text-[1.3em] font-bold self-end btn active:scale-[0.98] flex items-center justify-center' onClick={handleCreateDue} disabled={uploading || !input}>
                     {uploading ? <span><Spinner /></span>
                         : <i className="ri-arrow-up-line"></i>}
