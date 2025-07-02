@@ -36,6 +36,45 @@ const ConnectionLayout = ({ children }: { children: React.ReactNode }) => {
 
     }, []);
 
+
+    // handle searching
+    const [searchedList, setSearchedList] = useState<any[] | null>(null);
+    useEffect(() => {
+        setSearchedList(connectionList);
+    }, [connectionList]);
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.trim().toLowerCase();
+        if (!connectionList) return;
+
+        if (!value) {
+            // If input is empty, show all connections
+            setSearchedList(connectionList);
+            return;
+        }
+
+        // Score and filter connections
+        const scored = connectionList
+            .map(item => {
+                const name = item.connectedUser?.userName?.toLowerCase() || '';
+                const email = item.connectedUser?.email?.toLowerCase() || '';
+                let score = 0;
+                if (name === value || email === value) score += 100;
+                else {
+                    if (name.startsWith(value)) score += 50;
+                    if (email.startsWith(value)) score += 40;
+                    if (name.includes(value)) score += 20;
+                    if (email.includes(value)) score += 10;
+                }
+                return { item, score };
+            })
+            .filter(entry => entry.score > 0)
+            .sort((a, b) => b.score - a.score)
+            .map(entry => entry.item);
+
+        setSearchedList(scored);
+    }
+
     return (
         <AuthenticatedContainer>
             <div className='grid grid-cols-[auto_1fr] h-[calc(100vh-56px)]'>
@@ -43,7 +82,7 @@ const ConnectionLayout = ({ children }: { children: React.ReactNode }) => {
                     <div className='mb-4 grid grid-cols-[1fr_auto] items-center gap-2'>
                         <div className='flex items-center focus-within:[&>span]:text-[var(--primary)]'>
                             <span className='absolute ml-2.5 text-lg font-semibold text-gray-300 transition-all duration-300'><i className="ri-search-2-line"></i></span>
-                            <input type="text" placeholder='Search connections' className='input-control !pl-9' />
+                            <input type="search" placeholder='Search connections' className='input-control !pl-9' onChange={handleSearch} />
                         </div>
                         <div>
                             <button className="btn btn-primary" onClick={() => setOpenNewConnection(true)}><span className='font-bold'><i className="ri-add-large-fill"></i></span></button>
@@ -54,7 +93,7 @@ const ConnectionLayout = ({ children }: { children: React.ReactNode }) => {
                             connectionList === null && <div className='flex justify-center my-3 items-center gap-3'><Spinner size={15} /><span>loading connections...</span></div>
                         }
                         {
-                            connectionList?.map((item, index) => (
+                            searchedList?.map((item, index) => (
                                 <ConnectionItem key={index} data={item} />
                             ))
                         }
@@ -66,6 +105,9 @@ const ConnectionLayout = ({ children }: { children: React.ReactNode }) => {
                                     <button className='btn btn-primary' onClick={() => setOpenNewConnection(true)}><span className='mr-2'><i className="ri-add-large-fill font-bold"></i></span><span>Add connection</span></button>
                                 </div>
                             </div>
+                        }
+                        {
+                            (connectionList && connectionList?.length > 0 && searchedList?.length === 0) && <div className='text-center text-sm text-gray-300'>No connections found</div>
                         }
                     </div>
                 </div>

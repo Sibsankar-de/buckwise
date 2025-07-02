@@ -17,29 +17,14 @@ const ConnectionPage = () => {
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
-        const handleFocus = () => {
-            window.scrollTo(0, 0);
-            document.body.style.overflow = 'hidden';
-        };
+        // Disable scroll on mount
+        document.body.style.overflow = 'hidden';
 
-        const handleBlur = () => {
-            document.body.style.overflow = '';
-        };
-
-        const input = inputRef.current;
-        if (input) {
-            input.addEventListener('focus', handleFocus);
-            input.addEventListener('blur', handleBlur);
-        }
-
+        // Re-enable scroll on unmount
         return () => {
-            if (input) {
-                input.removeEventListener('focus', handleFocus);
-                input.removeEventListener('blur', handleBlur);
-            }
+            document.body.style.overflow = 'auto';
         };
     }, []);
-
 
     // handle input change
     const [input, setInput] = useState('');

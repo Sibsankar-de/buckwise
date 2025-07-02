@@ -231,7 +231,7 @@ const ImageCropper = ({ openState, onClose, file, onCropComplete }: { openState:
     return (
         <PopupBox openState={openState} onClose={onClose} >
             <div >
-                <div className='w-[80vw] h-[65svh] overflow-y-auto relative mb-3'>
+                <div className='md:w-[80vw] w-[90vw] md:h-[65svh] h-[80svh] overflow-y-auto relative mb-3'>
                     <Cropper
                         image={imageSrc}
                         crop={crop}

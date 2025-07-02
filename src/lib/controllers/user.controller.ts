@@ -303,6 +303,36 @@ export const getUsersList = asyncHandler(async (req: NextRequest, context: Middl
             }
         },
         {
+            // checks if there any connection exists 
+            $lookup: {
+                from: 'connections',
+                let: { otherUserId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $in: [userIdObj, "$members"]
+                            }
+                        }
+                    },
+                    {
+                        $match: {
+                            $expr: {
+                                $in: ["$$otherUserId", "$members"]
+                            }
+                        }
+                    },
+                    { $limit: 1 }
+                ],
+                as: "existingConnection"
+            }
+        },
+        {
+            $match: {
+                "existingConnection": { $size: 0 }
+            }
+        },
+        {
             $lookup: {
                 from: 'connectionrequests',
                 let: { crUserId: "$_id" },
@@ -312,12 +342,12 @@ export const getUsersList = asyncHandler(async (req: NextRequest, context: Middl
                             $expr: {
                                 $and: [
                                     { $eq: ["$from", userIdObj] },
-                                    { $eq: ["$to", "$$crUserId"] },
+                                    { $eq: ["$to", "$$crUserId"] }
                                 ]
                             }
                         }
                     },
-                    { $limit: 1 } // Only get one connectionRequest per user
+                    { $limit: 1 }
                 ],
                 as: "connectionRequest"
             }
