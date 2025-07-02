@@ -39,7 +39,7 @@ const ConnectionLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <AuthenticatedContainer>
             <div className='grid grid-cols-[auto_1fr] h-[calc(100vh-56px)]'>
-                <div className='bg-[var(--subground)] p-4 pb-0 lg:w-[25em] md:w-[35vw] w-[100vw] grid grid-rows-[auto_1fr] h-[calc(100vh-56px)] sticky top-[56px]'>
+                <div className='bg-[var(--subground)] p-4 pb-0 lg:w-[25em] md:w-[35vw] w-[100vw] grid grid-rows-[auto_1fr] h-[calc(100svh-56px)] sticky top-[56px]'>
                     <div className='mb-4 grid grid-cols-[1fr_auto] items-center gap-2'>
                         <div className='flex items-center focus-within:[&>span]:text-[var(--primary)]'>
                             <span className='absolute ml-2.5 text-lg font-semibold text-gray-300 transition-all duration-300'><i className="ri-search-2-line"></i></span>
