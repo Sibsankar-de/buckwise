@@ -16,6 +16,30 @@ const ConnectionPage = () => {
     // handle UI
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
+    useEffect(() => {
+        const handleFocus = () => {
+            window.scrollTo(0, 0);
+            document.body.style.overflow = 'hidden';
+        };
+
+        const handleBlur = () => {
+            document.body.style.overflow = '';
+        };
+
+        const input = inputRef.current;
+        if (input) {
+            input.addEventListener('focus', handleFocus);
+            input.addEventListener('blur', handleBlur);
+        }
+
+        return () => {
+            if (input) {
+                input.removeEventListener('focus', handleFocus);
+                input.removeEventListener('blur', handleBlur);
+            }
+        };
+    }, []);
+
 
     // handle input change
     const [input, setInput] = useState('');
