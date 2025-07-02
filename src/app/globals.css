@@ -1,26 +1,239 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #1D2D44;
+  --foreground: #f4f4f4;
+  --subground: #0D1321;
+  --primary: #126f72;
+  --hover: #5f5f5f3c;
+  --text-light: #bcbcbc;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/chat-bg.png');
+  background-size: 100%;
+  background-repeat: repeat;
+  opacity: 0.15;
+  z-index: -1;
+}
+
+.page-container {
+  margin: 0em 10em;
+}
+
+@media screen and (max-width:768px) {
+  .page-container {
+    margin: 0em 0.5em;
+  }
+}
+
+@media screen and (max-width:1028px) and (min-width:769px) {
+  .page-container {
+    margin: 0em 5em;
+  }
+}
+
+.scroll-thin::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scroll-thin::-webkit-scrollbar-thumb {
+  background-color: #636363;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.scroll-thin::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0;
+}
+
+
+@media screen and (max-width: 767px) {
+
+  .chat-screen {
+    position: relative;
+    background-color: var(--background);
+  }
+
+  .chat-screen::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/chat-bg.png');
+    background-size: 100%;
+    background-repeat: repeat;
+    opacity: 0.15;
+    z-index: -1;
+  }
+
+}
+
+.input-control {
+  width: 100%;
+  outline: none;
+  border: 1px solid transparent;
+  background-color: #1a212f;
+  border-radius: 10px;
+  padding: 10px;
+  transition: 0.3s;
+}
+
+.input-control:focus {
+  background-color: var(--subground);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px #084a4c;
+}
+
+.btn {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+}
+
+.btn:active {
+  filter: brightness(0.8);
+}
+
+.btn:disabled {
+  filter: brightness(0.7);
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+.btn-secondary {
+  background-color: #2d415d;
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+.popup-open-anim {
+  animation: popupOpen 0.3s ease-in-out forwards;
+}
+
+.popup-close-anim {
+  animation: popupClose 0.3s ease-in-out forwards;
+}
+
+@keyframes popupOpen {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes popupClose {
+  from {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.flicker {
+  animation: flickerAnim 2s infinite linear;
+}
+
+@keyframes flickerAnim {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  10% {
+    opacity: 0.7;
+  }
+
+  20% {
+    opacity: 0.4;
+  }
+
+  30% {
+    opacity: 0.8;
+  }
+
+  40% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 0.6;
+  }
+
+  70% {
+    opacity: 0.9;
+  }
+
+  80% {
+    opacity: 0.3;
+  }
+
+  90% {
+    opacity: 0.8;
+  }
 }
