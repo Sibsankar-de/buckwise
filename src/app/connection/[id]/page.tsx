@@ -16,15 +16,6 @@ const ConnectionPage = () => {
     // handle UI
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
-    useEffect(() => {
-        // Disable scroll on mount
-        document.body.style.overflow = 'hidden';
-
-        // Re-enable scroll on unmount
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
-    }, []);
 
     // handle input change
     const [input, setInput] = useState('');
