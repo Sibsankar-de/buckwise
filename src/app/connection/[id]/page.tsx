@@ -12,6 +12,20 @@ import { toast } from 'react-toastify';
 const TEXTAREA_PLACEHOLDER = 'Write your message! eg: "I paid rupees 200 for the service"';
 
 const ConnectionPage = () => {
+
+    // page height
+    const [height, setHeight] = useState('calc(100vh-56px)');
+    useEffect(() => {
+        if (window.innerWidth > 786) return;
+        const setVh = () => {
+            const vh = window.innerHeight * 0.01;
+            setHeight(`${vh}vh`);
+        };
+        setVh();
+        window.addEventListener('resize', setVh);
+        return () => window.removeEventListener('resize', setVh);
+    }, []);
+
     // handle input change
     const [input, setInput] = useState('');
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -155,7 +169,7 @@ const ConnectionPage = () => {
     };
 
     return (
-        <div className='grid grid-rows-[auto_1fr_auto] chat-screen h-[calc(100vh-56px)] w-full max-md:absolute! max-md:top-0 max-md:h-[100svh] max-md:left-0 max-md:z-100'>
+        <div className={clsx('grid grid-rows-[auto_1fr_auto] chat-screen w-full max-md:absolute! max-md:top-0 max-md:left-0 max-md:z-100', `h-[${height}]`)}>
             <section className='flex items-center gap-3 p-3 bg-[var(--subground)] md:ml-0.5 md:mt-0.5 mb-1'>
                 <button className='flex items-center gap-1 btn' onClick={() => router.push('/connection')}>
                     <div><i className="ri-arrow-left-line"></i></div>
