@@ -29,6 +29,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
+  if (process.env.NODE_ENV === "production") {
+    if (typeof window !== "undefined") {
+      // In browser
+      window.console.log = () => {};
+      window.console.warn = () => {};
+      window.console.error = () => {};
+      window.console.info = () => {};
+      window.console.debug = () => {};
+    } else {
+      // In server
+      // @ts-ignore
+      global.console.log = () => {};
+      // @ts-ignore
+      global.console.warn = () => {};
+      // @ts-ignore
+      global.console.error = () => {};
+      // @ts-ignore
+      global.console.info = () => {};
+      // @ts-ignore
+      global.console.debug = () => {};
+    }
+  }
+
   return (
     <html lang="en">
       <Head>

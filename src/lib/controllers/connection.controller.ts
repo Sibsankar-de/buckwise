@@ -130,15 +130,19 @@ export const createDue = asyncHandler(async (req: NextRequest, context: Middlewa
     });
 
     const data = JSON.parse(response.choices[0].message.content || "");
-    console.log(data);
 
     if (data.ammount === null || data.ammount === 0 || data.amount === null) throw new ApiError(403, "Invalid message");
 
 
     // find room
     const room = await Connection.findOne({
-        members: { $in: [new mongoose.Types.ObjectId(userId), new mongoose.Types.ObjectId(connectedUserId)] }
-    })
+        members: {
+            $all: [
+                new mongoose.Types.ObjectId(userId),
+                new mongoose.Types.ObjectId(connectedUserId)
+            ]
+        }
+    });
 
     const roomId: mongoose.Types.ObjectId = room._id;
     if (!room) throw new ApiError(400, "Room not found. Create a request first");
@@ -186,7 +190,7 @@ export const updateDues = asyncHandler(async (req: NextRequest, context: Middlew
                 _id: { $ne: new mongoose.Types.ObjectId(due._id) },
                 dueFrom: new mongoose.Types.ObjectId(dueToUser._id),
                 isDue: true,
-                'content.dueAmount': { $lte: due.content.dueAmount }
+                'content.dueAmount': { $gt: 0 }
             }
         },
         {
@@ -206,7 +210,6 @@ export const updateDues = asyncHandler(async (req: NextRequest, context: Middlew
         if (dueAmount <= 0) continue;
         const updatedDueAmount = Math.max(dueAmount - remainings, 0);
         const updatedPaidAmount = Math.min(dueAmount, remainings) + pendingDue.content.paidAmount;
-        console.log(updatedDueAmount, updatedPaidAmount);
 
         const updatedDue = await Due.findByIdAndUpdate(pendingDue._id, {
             'content.dueAmount': updatedDueAmount,
@@ -362,12 +365,22 @@ export const getRoomMessages = asyncHandler(async (req: NextRequest, context: Mi
     const connectedUserId = searchParams.get('id')
     const { userId } = context!;
     if (!connectedUserId) throw new ApiError(400, "User id is required");
-    const room = await Connection.findOne({ members: { $in: [userId, connectedUserId] } });
+    const room = await Connection.findOne({
+        members: {
+            $all: [
+                new mongoose.Types.ObjectId(userId),
+                new mongoose.Types.ObjectId(connectedUserId)
+            ]
+        }
+    });
+    if (!room) throw new ApiError(402, "Room doesn't exist");
+
+    const roomIdObj = new mongoose.Types.ObjectId(room?._id);
 
     const messageList = await Due.aggregate([
         {
             $match: {
-                roomId: new mongoose.Types.ObjectId(room._id)
+                roomId: roomIdObj
             }
         },
         {
@@ -406,7 +419,7 @@ export const getRoomMessages = asyncHandler(async (req: NextRequest, context: Mi
                 pipeline: [
                     {
                         $match: {
-                            roomId: new mongoose.Types.ObjectId(room._id)
+                            roomId: roomIdObj
                         }
                     }
                 ]
