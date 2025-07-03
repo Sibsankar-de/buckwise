@@ -150,9 +150,10 @@ const AddConnectionPopup = ({ openState, onClose }: { openState: boolean, onClos
             }
         }
 
-        fetchList();
+        openState &&
+            fetchList();
 
-    }, []);
+    }, [openState]);
 
     // handle search
     const [input, setInput] = useState("");
