@@ -123,7 +123,7 @@ const ConnectionItem = ({ data }: { data: Record<string, any> }) => {
     const router = useRouter();
     return (
         <div className='flex items-center gap-4 p-2 hover:bg-[var(--hover)] cursor-pointer mb-3 w-full rounded-xl transition-all duration-200' onClick={() => router.push(`/connection/${data.connectedUser._id}?room=${data.roomId}`)}>
-            <img src="/profile-placeholder.png" alt="" className='w-17 h-17 rounded-full' />
+            <img src={data?.connectedUser?.avatar || "/profile-placeholder.png"} alt="" className='w-17 h-17 rounded-full' />
             <div>
                 <h5 className='text-[1.1em] font-semibold break-all line-clamp-1'>{data.connectedUser.userName}</h5>
                 {data.lastMessage.content && <p className='text-gray-500 break-all line-clamp-1 text-sm'>{data.lastMessage.content.status}</p>}
