@@ -253,7 +253,7 @@ const PopupUserItem = ({ data }: { data: Record<string, any> }) => {
                     });
             }
         } catch (error) {
-            toast.error("Unable tp perform request");
+            toast.error("Unable to perform request");
         }
         setSending(false);
     }
