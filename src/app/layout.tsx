@@ -6,6 +6,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Navbar } from "./components/Navbar";
 import { AuthProvider } from "./contexts/AuthProvider";
 import { ToastContainer } from "react-toastify";
+import Head from "next/head";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,12 +31,12 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <head>
+      <Head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, interactive-widget=resizes-content"
         />
-      </head>
+      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
